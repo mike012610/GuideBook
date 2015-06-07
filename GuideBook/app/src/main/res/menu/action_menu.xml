@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.actionbartest.MainActivity" >
+
+    <item
+        android:id="@+id/action_compose"
+        android:title="first"
+        android:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/ation_delete"
+        android:title="second"
+        android:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/action_compose1"
+        android:title="first2"
+        android:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/ation_delete2"
+        android:title="second2"
+        android:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/action_settings"
+        android:showAsAction="never" />
+
+</menu> 
