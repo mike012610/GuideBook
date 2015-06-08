@@ -1,9 +1,5 @@
 package com.mike012610.guidebook;
 
-import android.content.Context;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,7 +23,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                 .findFragmentById(R.id.map);
         map = mapfrag.getMap();
         map.setMyLocationEnabled(true);
-        moveNow(map);
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
@@ -42,15 +37,20 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
 
     @Override
     public void onMapReady(final GoogleMap map) {
+        moveNow(map);
         map.addMarker(new MarkerOptions().position(NOW).title("Marker").snippet("now!!!"));
     }
 
     private void moveNow(GoogleMap map) {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String provider = locationManager.getBestProvider(criteria, true);
-        Location myLocation = locationManager.getLastKnownLocation(provider);
-        NOW = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
+        GPSTracker gps = new GPSTracker(MapsActivity.this);
+        if(gps.canGetLocation()) {
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+        } else {
+            gps.showSettingsAlert();
+        }
+        NOW = new LatLng(gps.getLatitude(),gps.getLongitude());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(NOW, 16));
     }
+
 }
