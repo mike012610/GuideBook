@@ -30,7 +30,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -100,14 +102,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                fake_login();
+                fake_login(view);
             }
         });
         Button mTest = (Button) findViewById(R.id.test_button);
         mTest.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                test_login(view);
+                signup(view);
             }
         });
 
@@ -121,20 +123,42 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         getLoaderManager().initLoader(0, null, this);
     }
 
-    public void fake_login() {
-        Intent intent = new Intent();
-        intent.setClass(this, MapsActivity.class);
-        startActivity(intent);
-        this.finish();
-    }
-    public void test_login(View view) {
-        String url = "http://140.112.31.159:8000/db/test";
+    public void fake_login(View view) {
+        String url = "http://140.112.31.159/db/signin";
         HttpMethod conn = new HttpMethod(url,"POST");
-        String ans = conn.connect();
+
+        Map<String, String> params = new HashMap<String, String>();
+
+        String account = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+        params.put("username",account);
+        params.put("password",password);
+
+        String ans = conn.connect(params);
+        if(ans != null && ans.equals("success")) {
+            Intent intent = new Intent();
+            intent.setClass(this, MapsActivity.class);
+            startActivity(intent);
+            this.finish();
+        }
+        else {
+            Toast.makeText(view.getContext(), ans, Toast.LENGTH_LONG).show();
+        }
+    }
+    public void signup(View view) {
+        String url = "http://140.112.31.159/db/signup";
+        HttpMethod conn = new HttpMethod(url,"POST");
+
+        Map<String, String> params = new HashMap<String, String>();
+
+        String account = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+        params.put("username",account);
+        params.put("password",password);
+
+        String ans = conn.connect(params);
         if(ans != null)
             Toast.makeText(view.getContext(), ans, Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(view.getContext(), "Test Login!!!!", Toast.LENGTH_LONG).show();
 
     }
 

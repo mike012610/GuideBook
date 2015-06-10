@@ -1,6 +1,7 @@
 package com.mike012610.guidebook;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,6 +14,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
     private LatLng NOW = null;
     private GoogleMap map;
     private int count = 0;
+    private boolean marker = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +25,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                 .findFragmentById(R.id.map);
         map = mapfrag.getMap();
         map.setMyLocationEnabled(true);
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng point) {
-                map.addMarker(new MarkerOptions().position(point).title(String.valueOf(count)).snippet("test"));
-                count += 1;
-            }
-        });
         map.setPadding(0, obtainActionBarHeight(), 0, 0);
         mapfrag.getMapAsync(this);
 
@@ -53,4 +48,27 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(NOW, 16));
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_marker:
+                if (!marker) {
+                    map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                        @Override
+                        public void onMapClick(LatLng point) {
+                            map.addMarker(new MarkerOptions().position(point).title(String.valueOf(count)).snippet("test"));
+                            count += 1;
+                        }
+                    });
+                    marker = true;
+                }
+                else {
+                    map.setOnMapClickListener(null);
+                    marker = false;
+                }
+                break;
+        }
+        return true;
+    }
 }

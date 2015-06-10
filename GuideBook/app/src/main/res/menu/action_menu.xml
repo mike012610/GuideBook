@@ -3,23 +3,16 @@
     tools:context="com.example.actionbartest.MainActivity" >
 
     <item
-        android:id="@+id/action_compose"
-        android:title="first"
+        android:id="@+id/action_marker"
+        android:title="add marker"
         android:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/ation_delete"
         android:title="second"
         android:showAsAction="ifRoom|withText" />
     <item
-        android:id="@+id/action_compose1"
-        android:title="first2"
-        android:showAsAction="ifRoom|withText"/>
-    <item
-        android:id="@+id/ation_delete2"
-        android:title="second2"
-        android:showAsAction="ifRoom|withText" />
-    <item
         android:id="@+id/action_settings"
+        android:title="setting"
         android:showAsAction="never" />
 
 </menu> 

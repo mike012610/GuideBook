@@ -1,6 +1,7 @@
 package com.mike012610.guidebook;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ public class BaseActivity extends Activity
     public String[] layers;
     private ActionBarDrawerToggle drawerToggle;
     private Map map;
+    private static int now = 0;
 
     protected void onCreateDrawer(Bundle savedInstanceState)
     {
@@ -63,9 +65,27 @@ public class BaseActivity extends Activity
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long arg3) {
+                select_activity(pos);
                 //map.drawerClickEvent(pos);
             }
         });
+    }
+
+    private void select_activity(int pos) {
+        Intent intent = new Intent();
+        if(pos == now)
+            return;
+        now = pos;
+        switch(pos){
+            case 0:
+                intent.setClass(this, MapsActivity.class);
+                break;
+            case 1:
+                intent.setClass(this, ManageActivity.class);
+                break;
+        }
+        startActivity(intent);
+        this.finish();
     }
 
     @Override
