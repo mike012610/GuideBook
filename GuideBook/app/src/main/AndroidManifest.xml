@@ -33,6 +33,11 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -44,13 +49,7 @@
         </activity>
         <activity
             android:name=".slidepanel"
-            android:label="@string/title_activity_slidepanel"
-            android:theme="@style/Theme.AppCompat.Light">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/title_activity_slidepanel">
         </activity>
     </application>
 
