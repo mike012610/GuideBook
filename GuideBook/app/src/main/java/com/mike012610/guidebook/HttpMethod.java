@@ -19,22 +19,22 @@ import java.util.Map;
  */
 public class HttpMethod {
     private URL url;
-    private String method;
+    private Map<String, String> params;
 
 
-    public HttpMethod(String url,String method) {
+    public HttpMethod(String url,Map<String, String> params) {
         try {
             this.url = new URL(url);
-            this.method = method;
+            this.params = params;
         }
         catch (MalformedURLException e)
         {
         }
     }
 
-    public String connect(Map<String, String> params) {
+    public String connect() {
 
-        byte[] data = getRequestData(params, "UTF-8").toString().getBytes();
+        byte[] data = getRequestData(this.params, "UTF-8").toString().getBytes();
 
         String ans;
         try {
@@ -89,7 +89,7 @@ public class HttpMethod {
 
 
     ///////////////////////////////
-    public static StringBuffer getRequestData(Map<String, String> params, String encode) {
+    private static StringBuffer getRequestData(Map<String, String> params, String encode) {
         StringBuffer stringBuffer = new StringBuffer();
         try {
             for(Map.Entry<String, String> entry : params.entrySet()) {

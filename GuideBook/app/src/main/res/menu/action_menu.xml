@@ -4,11 +4,11 @@
 
     <item
         android:id="@+id/action_marker"
-        android:title="add marker"
+        android:title="marker"
         android:showAsAction="ifRoom|withText"/>
     <item
-        android:id="@+id/ation_delete"
-        android:title="second"
+        android:id="@+id/add"
+        android:title="add"
         android:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/action_settings"

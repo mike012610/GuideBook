@@ -33,6 +33,10 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,16 +44,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
-        <activity
             android:name=".ManageActivity"
             android:label="@string/title_activity_manage" >
         </activity>
         <activity
             android:name=".slidepanel"
-            android:label="@string/title_activity_slidepanel">
+            android:label="@string/title_activity_slidepanel" >
+        </activity>
+        <activity
+            android:name=".MakeLocationActivity"
+            android:label="@string/title_activity_make_location"
+            android:parentActivityName=".MapsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mike012610.guidebook.MapsActivity" />
         </activity>
     </application>
 

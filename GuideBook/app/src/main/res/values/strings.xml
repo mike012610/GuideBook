@@ -25,4 +25,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_slidepanel">slidepanel</string>
+    <string name="title_activity_make_location">MakeLocationActivity</string>
+
+    <string name="new_location_name">名稱 :</string>
 </resources>

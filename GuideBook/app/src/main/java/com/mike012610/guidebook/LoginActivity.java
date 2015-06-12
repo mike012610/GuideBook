@@ -125,7 +125,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     public void fake_login(View view) {
         String url = "http://140.112.31.159/db/signin";
-        HttpMethod conn = new HttpMethod(url,"POST");
 
         Map<String, String> params = new HashMap<String, String>();
 
@@ -134,7 +133,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         params.put("username",account);
         params.put("password",password);
 
-        String ans = conn.connect(params);
+        HttpMethod conn = new HttpMethod(url,params);
+        String ans = conn.connect();
         if(ans != null && ans.equals("success")) {
             Intent intent = new Intent();
             intent.setClass(this, MapsActivity.class);
@@ -147,7 +147,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
     public void signup(View view) {
         String url = "http://140.112.31.159/db/signup";
-        HttpMethod conn = new HttpMethod(url,"POST");
 
         Map<String, String> params = new HashMap<String, String>();
 
@@ -155,8 +154,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         String password = mPasswordView.getText().toString();
         params.put("username",account);
         params.put("password",password);
-
-        String ans = conn.connect(params);
+        HttpMethod conn = new HttpMethod(url,params);
+        String ans = conn.connect();
         if(ans != null)
             Toast.makeText(view.getContext(), ans, Toast.LENGTH_LONG).show();
 
