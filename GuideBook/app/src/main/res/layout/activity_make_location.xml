@@ -5,7 +5,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.mike012610.guidebook.MakeLocationActivity">
+    tools:context="com.mike012610.guidebook.MakeLocationActivity"
+    android:id="@+id/new_location_view">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,7 +14,7 @@
         <TextView android:text="@string/new_location_name" android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/location_new_name1"
+            android:id="@+id/location_new_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -21,10 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView android:text="@string/new_location_name" android:layout_width="wrap_content"
+        <TextView android:text="@string/new_location_lng" android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/location_new_name2"
+        <TextView
+            android:id="@+id/location_new_lng"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -32,12 +33,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView android:text="@string/new_location_name" android:layout_width="wrap_content"
+        <TextView android:text="@string/new_location_lat" android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/location_new_name3"
+        <TextView
+            android:id="@+id/location_new_lat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="確定"
+        android:id="@+id/new_location_submit">
+
+    </Button>
 
 </LinearLayout>

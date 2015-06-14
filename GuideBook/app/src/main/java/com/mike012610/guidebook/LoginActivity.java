@@ -124,7 +124,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     public void fake_login(View view) {
-        String url = "http://140.112.31.159/db/signin";
+        String url = "http://140.112.31.159:8000/db/signin";
 
         Map<String, String> params = new HashMap<String, String>();
 
@@ -146,7 +146,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         }
     }
     public void signup(View view) {
-        String url = "http://140.112.31.159/db/signup";
+        String url = "http://140.112.31.159:8000/db/signup";
 
         Map<String, String> params = new HashMap<String, String>();
 

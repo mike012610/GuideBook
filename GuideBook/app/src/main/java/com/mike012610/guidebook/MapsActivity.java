@@ -1,5 +1,6 @@
 package com.mike012610.guidebook;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,6 +16,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
     private LatLng NOW = null;
@@ -29,6 +33,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
             map.setOnMapClickListener(null);
         }
     };
+    private Marker new_loc=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +66,20 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        switch(resultCode){
+            case RESULT_OK:
+                Bundle bundle = data.getExtras();
+                Toast.makeText(drawerLayout.getContext(), "success", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void onMapReady(final GoogleMap map) {
         moveNow(map);
-        map.addMarker(new MarkerOptions().position(NOW).title("Marker").snippet("now!!!"));
     }
 
     private void moveNow(GoogleMap map) {
@@ -87,7 +103,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                     map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override
                         public void onMapClick(LatLng point) {
-                            map.addMarker(new MarkerOptions().position(point).title(String.valueOf(count)).snippet("test"));
+                            if(new_loc!=null)
+                                new_loc.remove();
+                            new_loc = map.addMarker(new MarkerOptions().position(point).title(String.valueOf(count)).snippet("test"));
                             count += 1;
                         }
                     });
@@ -98,11 +116,33 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                     marker = false;
                 }
                 break;
+            case R.id.add:
+                if(new_loc==null)
+                    break;
+                Intent intent = new Intent();
+                intent.setClass(MapsActivity.this, MakeLocationActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("lat", String.valueOf(new_loc.getPosition().latitude));
+                bundle.putString("lng", String.valueOf(new_loc.getPosition().longitude));
+                intent.putExtras(bundle);
+                startActivityForResult(intent,0);
+                break;
+            case R.id.search:
+                LatLng center = map.getCameraPosition().target;
+                String lat = String.valueOf(center.latitude);
+                String lng = String.valueOf(center.longitude);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("lat",lat);
+                params.put("lng",lng);
+                HttpMethod conn = new HttpMethod("http://140.112.31.159:8000/db/localsearch",params);
+                new search().execute(conn);
+                break;
+            default:
+                break;
         }
         return true;
     }
-
-    private class MakeLocation extends AsyncTask<HttpMethod,Integer,String>{
+    private class search extends AsyncTask<HttpMethod,Integer,String> {
 
         @Override
         protected String doInBackground(HttpMethod... param) {
@@ -112,7 +152,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(drawerLayout.getContext(), result, Toast.LENGTH_LONG).show();
+            if(result != null)
+                Toast.makeText(drawerLayout.getContext(), "good!!!!", Toast.LENGTH_LONG).show();
         }
     }
 }

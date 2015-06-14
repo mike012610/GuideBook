@@ -54,7 +54,8 @@
         <activity
             android:name=".MakeLocationActivity"
             android:label="@string/title_activity_make_location"
-            android:parentActivityName=".MapsActivity" >
+            android:parentActivityName=".MapsActivity"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mike012610.guidebook.MapsActivity" />

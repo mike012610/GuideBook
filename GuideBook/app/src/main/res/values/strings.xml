@@ -28,4 +28,6 @@
     <string name="title_activity_make_location">MakeLocationActivity</string>
 
     <string name="new_location_name">名稱 :</string>
+    <string name="new_location_lat">緯度 :</string>
+    <string name="new_location_lng">經度 :</string>
 </resources>

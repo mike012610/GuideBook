@@ -36,7 +36,7 @@ public class HttpMethod {
 
         byte[] data = getRequestData(this.params, "UTF-8").toString().getBytes();
 
-        String ans;
+        String ans=null;
         try {
             HttpURLConnection urlConnection = (HttpURLConnection)this.url.openConnection();
             urlConnection.setConnectTimeout(3000);
