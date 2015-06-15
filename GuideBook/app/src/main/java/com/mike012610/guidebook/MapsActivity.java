@@ -16,6 +16,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +28,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
     private GoogleMap map;
     private int count = 0;
     private boolean marker = false;
+    private int marker_num = 0;
+    private Marker[] search_result = new Marker[20];
     private SlidingUpPanelLayout slide_Layout;
     private GoogleMap.OnMapClickListener  panel_disable = new GoogleMap.OnMapClickListener() {
         @Override
@@ -52,9 +57,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                marker.showInfoWindow();
                 TextView tv = (TextView) findViewById(R.id.location_name);
-                tv.setText("set success");
+                tv.setText(marker.getTitle());
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 16));
                 slide_Layout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 map.setOnMapClickListener(panel_disable);
@@ -152,8 +156,55 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
 
         @Override
         protected void onPostExecute(String result) {
-            if(result != null)
-                Toast.makeText(drawerLayout.getContext(), "good!!!!", Toast.LENGTH_LONG).show();
+            JSONArray jArray=null;
+            String test = convertStandardJSONString(result);
+            if(result != null) {
+                try {
+                    jArray = new JSONArray(test);
+                    handle_jarray(jArray);
+                }catch(Exception e){throw new RuntimeException(e);
+                }
+            }
+            int a = 3;
+            int b = 4;
         }
+
+        private void handle_jarray(JSONArray input){
+            JSONObject tmp;
+            double lat;
+            double lng;
+            String name;
+            String id;
+            for(int i = 0;i<marker_num;i++)
+                search_result[i].remove();
+            marker_num = 0;
+            for(int i=0; i< input.length();i++)
+            {
+                try {
+                    tmp = input.getJSONObject(i).getJSONObject("fields");
+                    name = tmp.getString("name");
+                    lat = Double.parseDouble(tmp.getString("lat"));
+                    lng = Double.parseDouble(tmp.getString("lng"));
+                    id = input.getJSONObject(i).getString("pk");
+                    search_result[i] = map.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title(name).snippet(id));
+                    marker_num++;
+                }catch(Exception e){}
+            }
+
+        }
+    }
+
+    public String convertStandardJSONString(String origin){
+        String data_json = origin.replace("\\u", "#u");
+        data_json = data_json.replace("\\", "");
+        data_json = data_json.replace(" ", "");
+        data_json = data_json.replace("\"{", "{");
+        data_json = data_json.replace("}\",", "},");
+        data_json = data_json.replace("}\"", "}");
+        data_json = data_json.replace("\"[", "[");
+        data_json = data_json.replace("]\",", "],");
+        data_json = data_json.replace("]\"", "]");
+        data_json = data_json.replace("#u", "\\u");
+        return data_json;
     }
 }
