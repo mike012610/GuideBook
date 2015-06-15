@@ -48,10 +48,6 @@
             android:label="@string/title_activity_manage" >
         </activity>
         <activity
-            android:name=".slidepanel"
-            android:label="@string/title_activity_slidepanel" >
-        </activity>
-        <activity
             android:name=".MakeLocationActivity"
             android:label="@string/title_activity_make_location"
             android:parentActivityName=".MapsActivity"

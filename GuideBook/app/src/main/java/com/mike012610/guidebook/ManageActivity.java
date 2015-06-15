@@ -15,7 +15,6 @@ public class ManageActivity extends BaseActivity{
     private ListView listView;
     private String[] list = {"鉛筆","原子筆","鋼筆","毛筆","彩色筆"};
     private ArrayAdapter<String> listAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

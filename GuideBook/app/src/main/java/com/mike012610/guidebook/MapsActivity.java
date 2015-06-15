@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,11 @@ import java.util.Map;
 
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
+
+    private ListView listView;
+    private ArrayAdapter<String> listAdapter;
+    private TextView nodata;
+
     private LatLng NOW = null;
     private GoogleMap map;
     private int count = 0;
@@ -57,8 +65,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                nodata = (TextView) findViewById(R.id.no_data);
+                nodata.setVisibility(View.GONE);
                 TextView tv = (TextView) findViewById(R.id.location_name);
                 tv.setText(marker.getTitle());
+                GetLoction(marker.getSnippet());
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 16));
                 slide_Layout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 map.setOnMapClickListener(panel_disable);
@@ -146,6 +157,51 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
         }
         return true;
     }
+
+    public void GetLoction(String id){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("id",id);
+        HttpMethod conn = new HttpMethod("http://140.112.31.159:8000/db/getlocationguide",params);
+        new get_location_guide().execute(conn);
+    }
+
+    private class get_location_guide extends AsyncTask<HttpMethod,Integer,String> {
+
+        @Override
+        protected String doInBackground(HttpMethod... param) {
+            String ans = param[0].connect();
+            return ans;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            JSONArray jArray=null;
+            String test = convertStandardJSONString(result);
+            if(result != null) {
+                try {
+                    jArray = new JSONArray(test);
+                    handle_jarray(jArray);
+                }catch(Exception e){throw new RuntimeException(e);
+                }
+            }
+        }
+
+        private void handle_jarray(JSONArray input){
+            JSONObject tmp;
+            if(input.length()==0) {
+                nodata = (TextView) findViewById(R.id.no_data);
+                nodata.setVisibility(View.VISIBLE);
+                return;
+            }
+            for(int i=0; i< input.length();i++)
+            {
+                try {
+                    tmp = input.getJSONObject(i).getJSONObject("fields");
+                }catch(Exception e){}
+            }
+        }
+    }
+
     private class search extends AsyncTask<HttpMethod,Integer,String> {
 
         @Override
@@ -165,8 +221,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                 }catch(Exception e){throw new RuntimeException(e);
                 }
             }
-            int a = 3;
-            int b = 4;
         }
 
         private void handle_jarray(JSONArray input){
