@@ -54,7 +54,8 @@
                     android:text="新增導覽"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:id="@+id/make_guide"/>
             </LinearLayout>
             <ListView
                 android:layout_width="fill_parent"
@@ -73,7 +74,8 @@
                     android:layout_weight="1"
                     android:textSize="20sp"
                     android:gravity="center"
-                    android:text="No Data"/>
+                    android:text="No Data"
+                    android:visibility="invisible"/>
             </LinearLayout>
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>

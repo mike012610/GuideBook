@@ -10,51 +10,40 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class MakeLocationActivity extends Activity {
+public class MakeGuideActivity extends Activity {
 
-    private String lat;
-    private String lng;
-    private String name;
-    private Button bt;
-    private LinearLayout view;
-    private Intent intent;
+    private Button setRoute;
+    private String guide_name;
+    private String guide_intro;
+    private String author;
+    private String location_id;
     private Bundle bundle;
-    private TextView latView;
-    private TextView lngView;
+    private Intent intent;
+    private LinearLayout view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_make_location);
+        setContentView(R.layout.activity_make_guide);
 
+        view = (LinearLayout) findViewById(R.id.new_guide_view);
         intent = this.getIntent();
         bundle = intent.getExtras();
-        latView = (TextView)findViewById(R.id.location_new_lat);
-        latView.setText(bundle.getString("lat"));
-        lngView = (TextView)findViewById(R.id.location_new_lng);
-        lngView.setText(bundle.getString("lng"));
+        author = ((Account)getApplicationContext()).id;
+        location_id = bundle.getString("id");
 
-        view = (LinearLayout) findViewById(R.id.new_location_view);
-        bt = (Button) findViewById(R.id.new_location_submit);
-        bt.setOnClickListener(new View.OnClickListener() {
+        setRoute = (Button)findViewById(R.id.setRoute);
+        setRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lat = latView.getText().toString();
-                lng = lngView.getText().toString();
-                name = toUtf8(((EditText)findViewById(R.id.location_new_name)).getText().toString());
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("name",name);
-                params.put("lat",lat);
-                params.put("lng",lng);
-                HttpMethod conn = new HttpMethod("http://140.112.31.159/db/makelocation",params);
-                new MakeLocation().execute(conn);
+                String account = ((Account)getApplicationContext()).account;
+                SetGuideInfo();
             }
         });
     }
@@ -62,7 +51,7 @@ public class MakeLocationActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_make_location, menu);
+        getMenuInflater().inflate(R.menu.menu_make_guide, menu);
         return true;
     }
 
@@ -81,7 +70,20 @@ public class MakeLocationActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class MakeLocation extends AsyncTask<HttpMethod,Integer,String> {
+    public void SetGuideInfo(){
+        guide_name = toUtf8(((EditText)findViewById(R.id.new_guide_name)).getText().toString());
+        guide_intro = toUtf8(((EditText)findViewById(R.id.new_guide_intro)).getText().toString());
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("name",guide_name);
+        params.put("intro",guide_intro);
+        params.put("location_id",location_id);
+        params.put("author_id",author);
+        HttpMethod conn = new HttpMethod("http://140.112.31.159:8000/db/setguideinfo",params);
+        new setGuideInfoTask().execute(conn);
+    }
+
+    private class setGuideInfoTask extends AsyncTask<HttpMethod,Integer,String> {
 
         @Override
         protected String doInBackground(HttpMethod... param) {
@@ -92,8 +94,8 @@ public class MakeLocationActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
             if(result != null) {
-                MakeLocationActivity.this.setResult(RESULT_OK, intent);
-                MakeLocationActivity.this.finish();
+                MakeGuideActivity.this.setResult(RESULT_OK, intent);
+                MakeGuideActivity.this.finish();
             }
             else
                 Toast.makeText(view.getContext(), "!!!!!", Toast.LENGTH_LONG).show();

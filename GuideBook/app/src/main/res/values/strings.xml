@@ -30,4 +30,7 @@
     <string name="new_location_name">名稱 :</string>
     <string name="new_location_lat">緯度 :</string>
     <string name="new_location_lng">經度 :</string>
+    <string name="title_activity_make_guide">MakeGuideActivity</string>
+    <string name="title_activity_make_route">Map</string>
+    <string name="title_activity_guide_info">GuideInfoActivity</string>
 </resources>

@@ -3,10 +3,12 @@ package com.mike012610.guidebook;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,8 +32,12 @@ import java.util.Map;
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
 
     private ListView listView;
-    private ArrayAdapter<String> listAdapter;
+    private SimpleAdapter adapter;
     private TextView nodata;
+    private Button makeGuide;
+    private String current_id;
+    private String ref_lat;
+    private String ref_lng;
 
     private LatLng NOW = null;
     private GoogleMap map;
@@ -54,7 +61,21 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
         setContentView(R.layout.activity_main);
         super.onCreateDrawer(savedInstanceState);
 
+
+
         slide_Layout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        makeGuide = (Button) findViewById(R.id.make_guide);
+        makeGuide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MapsActivity.this, MakeGuideActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", current_id);
+                intent.putExtras(bundle);
+                startActivityForResult(intent,1);
+            }
+        });
 
         MapFragment mapfrag = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -69,8 +90,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                 nodata.setVisibility(View.GONE);
                 TextView tv = (TextView) findViewById(R.id.location_name);
                 tv.setText(marker.getTitle());
-                GetLoction(marker.getSnippet());
+                current_id = marker.getSnippet();
+                listView = (ListView) findViewById(R.id.guide_list);
+                listView.setAdapter(null);
+                GetLoction(current_id);
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 16));
+                ref_lat = String.valueOf(marker.getPosition().latitude);
+                ref_lng = String.valueOf(marker.getPosition().longitude);
                 slide_Layout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 map.setOnMapClickListener(panel_disable);
                 return true;
@@ -81,11 +107,26 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.action_menu, menu);
+        return true;
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         switch(resultCode){
             case RESULT_OK:
-                Bundle bundle = data.getExtras();
-                Toast.makeText(drawerLayout.getContext(), "success", Toast.LENGTH_LONG).show();
+                if(requestCode == 0) {
+                    Bundle bundle = data.getExtras();
+                    Toast.makeText(drawerLayout.getContext(), "success", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                else if(requestCode == 1) {
+                    Bundle bundle = data.getExtras();
+                    Toast.makeText(drawerLayout.getContext(), "success2", Toast.LENGTH_LONG).show();
+                    break;
+                }
                 break;
             default:
                 break;
@@ -143,13 +184,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                 startActivityForResult(intent,0);
                 break;
             case R.id.search:
-                LatLng center = map.getCameraPosition().target;
-                String lat = String.valueOf(center.latitude);
-                String lng = String.valueOf(center.longitude);
+                NOW = map.getCameraPosition().target;
+                String lat = String.valueOf(NOW.latitude);
+                String lng = String.valueOf(NOW.longitude);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("lat",lat);
                 params.put("lng",lng);
-                HttpMethod conn = new HttpMethod("http://140.112.31.159:8000/db/localsearch",params);
+                HttpMethod conn = new HttpMethod("http://140.112.31.159/db/localsearch",params);
                 new search().execute(conn);
                 break;
             default:
@@ -161,7 +202,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
     public void GetLoction(String id){
         Map<String, String> params = new HashMap<String, String>();
         params.put("id",id);
-        HttpMethod conn = new HttpMethod("http://140.112.31.159:8000/db/getlocationguide",params);
+        HttpMethod conn = new HttpMethod("http://140.112.31.159/db/getlocationguide",params);
         new get_location_guide().execute(conn);
     }
 
@@ -176,10 +217,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
         @Override
         protected void onPostExecute(String result) {
             JSONArray jArray=null;
-            String test = convertStandardJSONString(result);
             if(result != null) {
                 try {
-                    jArray = new JSONArray(test);
+                    jArray = new JSONArray(result);
                     handle_jarray(jArray);
                 }catch(Exception e){throw new RuntimeException(e);
                 }
@@ -193,12 +233,26 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                 nodata.setVisibility(View.VISIBLE);
                 return;
             }
+            final String ID_TITLE = "NAME", ID_SUBTITLE = "AUTHOR";
+            ArrayList<HashMap<String,String>> guidelist = new ArrayList<HashMap<String,String>>();
             for(int i=0; i< input.length();i++)
             {
                 try {
                     tmp = input.getJSONObject(i).getJSONObject("fields");
+                    HashMap<String,String> item = new HashMap<String,String>();
+                    item.put(ID_TITLE,tmp.getString("name"));
+                    item.put(ID_SUBTITLE,tmp.getString("author_name"));
+                    guidelist.add(item);
                 }catch(Exception e){}
             }
+            adapter = new SimpleAdapter(
+                    slide_Layout.getContext(),
+                    guidelist,
+                    android.R.layout.simple_list_item_2,
+                    new String[] { "NAME","AUTHOR" },
+                    new int[] { android.R.id.text1, android.R.id.text2 } );
+            listView = (ListView) findViewById(R.id.guide_list);
+            listView.setAdapter(adapter);
         }
     }
 
@@ -213,7 +267,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
         @Override
         protected void onPostExecute(String result) {
             JSONArray jArray=null;
-            String test = convertStandardJSONString(result);
+            String test = result;
             if(result != null) {
                 try {
                     jArray = new JSONArray(test);
@@ -248,17 +302,4 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
         }
     }
 
-    public String convertStandardJSONString(String origin){
-        String data_json = origin.replace("\\u", "#u");
-        data_json = data_json.replace("\\", "");
-        data_json = data_json.replace(" ", "");
-        data_json = data_json.replace("\"{", "{");
-        data_json = data_json.replace("}\",", "},");
-        data_json = data_json.replace("}\"", "}");
-        data_json = data_json.replace("\"[", "[");
-        data_json = data_json.replace("]\",", "],");
-        data_json = data_json.replace("]\"", "]");
-        data_json = data_json.replace("#u", "\\u");
-        return data_json;
-    }
 }

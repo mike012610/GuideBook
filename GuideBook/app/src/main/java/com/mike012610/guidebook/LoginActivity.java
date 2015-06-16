@@ -124,7 +124,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     public void fake_login(View view) {
-        String url = "http://140.112.31.159:8000/db/signin";
+        String url = "http://140.112.31.159/db/signin";
 
         Map<String, String> params = new HashMap<String, String>();
 
@@ -135,18 +135,26 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         HttpMethod conn = new HttpMethod(url,params);
         String ans = conn.connect();
-        if(ans != null && ans.equals("success")) {
+        if(ans != null) {
+            ((Account)getApplicationContext()).account = account;
+            try {
+                int a = Integer.parseInt(ans);
+                ((Account) getApplicationContext()).id = ans;
+            }catch(Exception e){
+                Toast.makeText(view.getContext(), ans, Toast.LENGTH_LONG).show();
+                return;
+            }
             Intent intent = new Intent();
             intent.setClass(this, MapsActivity.class);
             startActivity(intent);
             this.finish();
         }
         else {
-            Toast.makeText(view.getContext(), ans, Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), "fail", Toast.LENGTH_LONG).show();
         }
     }
     public void signup(View view) {
-        String url = "http://140.112.31.159:8000/db/signup";
+        String url = "http://140.112.31.159/db/signup";
 
         Map<String, String> params = new HashMap<String, String>();
 

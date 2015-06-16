@@ -12,9 +12,18 @@
         >
         <ListView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/listView"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView_manage"
             />
+        <TextView
+            android:id="@+id/no_data"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="No Data"
+            android:visibility="invisible"/>
     </LinearLayout>
 
 
