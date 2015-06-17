@@ -79,7 +79,7 @@ public class MakeGuideActivity extends Activity {
         params.put("intro",guide_intro);
         params.put("location_id",location_id);
         params.put("author_id",author);
-        HttpMethod conn = new HttpMethod("http://140.112.31.159:8000/db/setguideinfo",params);
+        HttpMethod conn = new HttpMethod("http://140.112.31.159/db/setguideinfo",params);
         new setGuideInfoTask().execute(conn);
     }
 

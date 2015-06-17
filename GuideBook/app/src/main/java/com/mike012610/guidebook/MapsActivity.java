@@ -1,8 +1,11 @@
 package com.mike012610.guidebook;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog.Builder;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -148,6 +152,36 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
         }
         NOW = new LatLng(gps.getLatitude(),gps.getLongitude());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(NOW, 16));
+    }
+
+    protected void dialog() {
+        AlertDialog.Builder builder = new Builder(MapsActivity.this);
+        builder.setMessage("確定要退出嗎?");
+        builder.setTitle("提示");
+        builder.setPositiveButton("確認",
+                new android.content.DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        MapsActivity.this.finish();
+                        //onBackPressed ();
+                    }
+                });
+        builder.setNegativeButton("取消",
+                new android.content.DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.create().show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            dialog();
+            return false;
+        }
+        return false;
     }
 
     @Override
