@@ -41,4 +41,5 @@
     <string name="title_activity_make_guide">MakeGuideActivity</string>
     <string name="title_activity_make_route">Map</string>
     <string name="title_activity_guide_info">GuideInfoActivity</string>
+    <string name="title_activity_load_route">LoadRouteActivity</string>
 </resources>

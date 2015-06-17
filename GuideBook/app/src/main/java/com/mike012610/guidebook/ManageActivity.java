@@ -39,6 +39,7 @@ public class ManageActivity extends BaseActivity{
         super.onCreateDrawer(savedInstanceState);
         listView = (ListView)findViewById(R.id.listView_manage);
         //listView.setPadding(0, obtainActionBarHeight(), 0, 0);
+        //listView.setPadding(0, obtainActionBarHeight(), 0, 0);
         GetUserGuide(((Account) getApplicationContext()).id);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -47,6 +48,7 @@ public class ManageActivity extends BaseActivity{
                 intent.setClass(ManageActivity.this, GuideInfoActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", idrec[position]);
+                bundle.putString("author_id",((Account) getApplicationContext()).id);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

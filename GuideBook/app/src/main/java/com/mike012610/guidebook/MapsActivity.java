@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -45,6 +46,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
     private String ref_lat;
     private String ref_lng;
     private boolean expanded = false;
+    private int[] id_tmprec;
+    private String[] aid_tmprec;
 
     private LatLng NOW = null;
     private GoogleMap map;
@@ -301,6 +304,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                 nodata.setVisibility(View.VISIBLE);
                 return;
             }
+            id_tmprec = new int[input.length()];
+            aid_tmprec = new String[input.length()];
             final String ID_TITLE = "NAME", ID_SUBTITLE = "AUTHOR";
             ArrayList<HashMap<String,String>> guidelist = new ArrayList<HashMap<String,String>>();
             for(int i=0; i< input.length();i++)
@@ -310,6 +315,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                     HashMap<String,String> item = new HashMap<String,String>();
                     item.put(ID_TITLE,tmp.getString("name"));
                     item.put(ID_SUBTITLE,tmp.getString("author_name"));
+                    id_tmprec[i] = Integer.parseInt(input.getJSONObject(i).getString("pk"));
+                    aid_tmprec[i] = tmp.getString("author_id");
                     guidelist.add(item);
                 }catch(Exception e){}
             }
@@ -321,6 +328,18 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                     new int[] { android.R.id.text1, android.R.id.text2 } );
             listView = (ListView) findViewById(R.id.guide_list);
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent();
+                    intent.setClass(MapsActivity.this, GuideInfoActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", String.valueOf(id_tmprec[position]));
+                    bundle.putString("author_id", aid_tmprec[position]);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
         }
     }
 

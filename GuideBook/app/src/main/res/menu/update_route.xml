@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mike012610.guidebook.UpdateRouteActivity">
     <item
-        android:id="@+id/see_route"
+        android:id="@+id/update_route"
         android:title="確定"
         android:showAsAction="ifRoom|withText"/>
     <item
-        android:id="@+id/update_route"
+        android:id="@+id/resume"
         android:title="還原"
         android:showAsAction="ifRoom|withText" />
 

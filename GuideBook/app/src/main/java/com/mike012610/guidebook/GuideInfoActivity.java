@@ -22,6 +22,7 @@ public class GuideInfoActivity extends Activity{
     private String guide_id;
     private String lat;
     private String lng;
+    private String author_id;
 
 
     @Override
@@ -33,6 +34,8 @@ public class GuideInfoActivity extends Activity{
         intent = this.getIntent();
         bundle = intent.getExtras();
         guide_id = bundle.getString("id");
+        author_id = bundle.getString("author_id");
+
         getguideinfo();
 
     }
@@ -45,6 +48,14 @@ public class GuideInfoActivity extends Activity{
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        MenuItem tmp = menu.findItem(R.id.update_route);
+        if(!(author_id.equals(((Account) getApplicationContext()).id)))
+            tmp.setVisible(false);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -53,7 +64,7 @@ public class GuideInfoActivity extends Activity{
 
         if (id == R.id.see_route) {
             Intent intent = new Intent();
-            intent.setClass(GuideInfoActivity.this, UpdateRouteActivity.class);
+            intent.setClass(GuideInfoActivity.this, LoadRouteActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("id", guide_id);
             bundle.putString("lat", lat);
@@ -80,7 +91,7 @@ public class GuideInfoActivity extends Activity{
     public void getguideinfo(){
         Map<String, String> params = new HashMap<String, String>();
         params.put("id",guide_id);
-        HttpMethod conn = new HttpMethod("http://140.112.31.159:8000/db/getguideinfo",params);
+        HttpMethod conn = new HttpMethod("http://140.112.31.159/db/getguideinfo",params);
         new get_guideinfo().execute(conn);
     }
 

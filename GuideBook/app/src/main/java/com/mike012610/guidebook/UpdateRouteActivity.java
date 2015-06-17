@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -288,6 +293,64 @@ public class UpdateRouteActivity extends BaseActivity implements OnMapReadyCallb
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.update_route, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        switch (item.getItemId()) {
+            case R.id.update_route:
+                update_route();
+                finish();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+    public void NodetoJson(JSONObject in,NodeInfo in2){
+        try {
+            in.put("name", in2.name);
+            in.put("lat", in2.lat);
+            in.put("lng", in2.lng);
+            in.put("order", String.valueOf(in2.order));
+            in.put("info", in2.info);
+        }catch(Exception e){throw (RuntimeException)e;}
+    }
+
+    public void update_route() {
+        NodeInfo[] tmp_rec = new NodeInfo[marker_num];
+        JSONObject tmp = new JSONObject();
+        JSONArray jarray = new JSONArray();
+        int i = 0;
+        for (NodeInfo value : rec3.values()) {
+            tmp = new JSONObject();
+            NodetoJson(tmp,value);
+            jarray.put(tmp);
+        }
+        String in = jarray.toString();
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("data",in);
+        params.put("guide_id", guide_id);
+        params.put("author_id",((Account)getApplicationContext()).id);
+        //params.put("lng",lng);
+        HttpMethod conn = new HttpMethod("http://140.112.31.159/db/setroute",params);
+        new UpdateRoute().execute(conn);
+    }
+
+    private class UpdateRoute extends AsyncTask<HttpMethod,Integer,String> {
+
+        @Override
+        protected String doInBackground(HttpMethod... param) {
+            String ans = param[0].connect();
+            return ans;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        }
     }
 
     @Override

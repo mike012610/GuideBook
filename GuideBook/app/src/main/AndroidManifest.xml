@@ -68,7 +68,7 @@
         </activity>
         <activity
             android:name=".UpdateRouteActivity"
-            android:label="@string/title_activity_make_route">
+            android:label="@string/title_activity_make_route" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mike012610.guidebook.ManageActivity" />
@@ -76,7 +76,11 @@
         <activity
             android:name=".GuideInfoActivity"
             android:label="@string/title_activity_guide_info"
-            android:theme="@style/Theme.Holo.Light.DarkActionBar.info">
+            android:theme="@style/Theme.Holo.Light.DarkActionBar.info" >
+        </activity>
+        <activity
+            android:name=".LoadRouteActivity"
+            android:label="@string/title_activity_load_route" >
         </activity>
     </application>
 
