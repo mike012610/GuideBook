@@ -1,6 +1,7 @@
 package com.mike012610.guidebook;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,7 +15,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.AlertDialog.Builder;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +24,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +44,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
     private String current_id;
     private String ref_lat;
     private String ref_lng;
+    private boolean expanded = false;
 
     private LatLng NOW = null;
     private GoogleMap map;
@@ -68,6 +71,30 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
 
 
         slide_Layout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        slide_Layout.setPanelSlideListener(new PanelSlideListener() {
+            @Override
+            public void onPanelExpanded(View panel) {
+               expanded = true;
+            }
+
+            @Override
+            public void onPanelCollapsed(View panel) {
+                expanded = false;
+            }
+
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+            }
+            @Override
+            public void onPanelAnchored(View panel) {
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+            }
+
+
+        });
         makeGuide = (Button) findViewById(R.id.make_guide);
         makeGuide.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,8 +205,14 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            dialog();
-            return false;
+            if(expanded == false) {
+                dialog();
+                return false;
+            }
+            else {
+                slide_Layout.setPanelState(PanelState.COLLAPSED);
+                expanded = false;
+            }
         }
         return false;
     }
