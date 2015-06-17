@@ -14,9 +14,5 @@
         android:id="@+id/search"
         android:title="search"
         android:showAsAction="ifRoom|withText" />
-    <item
-        android:id="@+id/action_settings"
-        android:title="setting"
-        android:showAsAction="never" />
 
 </menu> 

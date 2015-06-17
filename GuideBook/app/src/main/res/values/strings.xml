@@ -9,6 +9,14 @@
         <item>Manage</item>
     </string-array>
 
+    <string-array name="drag_menu">
+        <item>item1</item>
+        <item>item2</item>
+        <item>item3</item>
+        <item>item4</item>
+    </string-array>
+
+
     <!-- Strings related to login -->
     <string name="prompt_email">Username</string>
     <string name="prompt_password">Password</string>

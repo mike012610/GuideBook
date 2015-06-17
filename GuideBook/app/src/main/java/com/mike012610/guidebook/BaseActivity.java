@@ -14,8 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.Map;
-
 /**
  * Created by mike012610 on 2015/6/7.
  */
@@ -24,8 +22,7 @@ public class BaseActivity extends Activity
     public DrawerLayout drawerLayout;
     public ListView drawerList;
     public String[] layers;
-    private ActionBarDrawerToggle drawerToggle;
-    private Map map;
+    public ActionBarDrawerToggle drawerToggle;
     private static int now = 0;
 
     protected void onCreateDrawer(Bundle savedInstanceState)
@@ -35,7 +32,7 @@ public class BaseActivity extends Activity
 
         layers = getResources().getStringArray(R.array.drawer_menu);
         drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setPadding(0, obtainActionBarHeight(), 0, 0);
+        //drawerList.setPadding(0, obtainActionBarHeight(), 0, 0);
         drawerToggle = new ActionBarDrawerToggle((Activity) this, drawerLayout, 0, 0)
         {
             public void onDrawerClosed(View view)

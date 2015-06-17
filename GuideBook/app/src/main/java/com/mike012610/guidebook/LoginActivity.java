@@ -115,8 +115,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        mLoginFormView.setPadding(0, obtainActionBarHeight(), 0, 0);
-        mProgressView.setPadding(0, obtainActionBarHeight(), 0, 0);
+        //mLoginFormView.setPadding(0, obtainActionBarHeight(), 0, 0);
+        //mProgressView.setPadding(0, obtainActionBarHeight(), 0, 0);
     }
 
     private void populateAutoComplete() {

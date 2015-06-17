@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.mike012610.guidebook"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.sothree.slidinguppanel:library:3.0.0'
+    compile 'com.github.woxthebox:draglistview:1.1.3'
 }

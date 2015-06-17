@@ -2,7 +2,11 @@
 
     <style name="Theme.Holo.Light.DarkActionBar.Overlay"
         parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="Theme.Holo.Light.DarkActionBar.info"
+        parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:textSize">10pt</item>
     </style>
 
     <style name="AppTheme">

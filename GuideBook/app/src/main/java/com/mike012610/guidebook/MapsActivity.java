@@ -93,7 +93,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
             public void onPanelHidden(View panel) {
             }
 
-
         });
         makeGuide = (Button) findViewById(R.id.make_guide);
         makeGuide.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +111,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
                 .findFragmentById(R.id.map);
         map = mapfrag.getMap();
         map.setMyLocationEnabled(true);
-        map.setPadding(0, obtainActionBarHeight(), 0, 0);
+
 
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -219,7 +218,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         switch (item.getItemId()) {
             case R.id.action_marker:
                 if (!marker) {

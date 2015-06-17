@@ -1,14 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.mike012610.guidebook.GuideInfoActivity">
+    tools:context="com.mike012610.guidebook.UpdateRouteActivity">
     <item
         android:id="@+id/see_route"
-        android:title="觀看路線"
-        android:showAsAction="never"/>
+        android:title="確定"
+        android:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/update_route"
-        android:title="更新路線"
-        android:showAsAction="never" />
+        android:title="還原"
+        android:showAsAction="ifRoom|withText" />
 
 </menu>

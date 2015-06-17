@@ -38,7 +38,7 @@ public class ManageActivity extends BaseActivity{
         setContentView(R.layout.activity_manage);
         super.onCreateDrawer(savedInstanceState);
         listView = (ListView)findViewById(R.id.listView_manage);
-        listView.setPadding(0, obtainActionBarHeight(), 0, 0);
+        //listView.setPadding(0, obtainActionBarHeight(), 0, 0);
         GetUserGuide(((Account) getApplicationContext()).id);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
